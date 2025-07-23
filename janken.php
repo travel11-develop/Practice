@@ -11,20 +11,20 @@
     echo "あなたの手を数字で入力してください:\n";
 
     // ユーザーの入力値を取得
-    $player_hand = trim(fgets(STDIN));
+    $player_input = trim(fgets(STDIN));
 
     // ユーザーの入力値が数値でない場合エラー
-    if (is_numeric($player_hand) === false) {
+    if (is_numeric($player_input) === false) {
         echo "無効な入力です。0〜2の数字を入力してください:\n";
         exit;
     }    
     // ユーザーの入力値が0-2以外の場合エラー
-    if (isset($janken[$player_hand]) === false) {
+    if (isset($janken[$player_input]) === false) {
 	echo "無効な入力です。0〜2の数字を入力してください:\n";
         exit;
     }
 
-
+    $player_hand = (int)$player_input;
     echo '貴方の手：' . $janken[$player_hand] ."\n";
     
     // コンピュータの手をランダムで選択
@@ -36,24 +36,25 @@
         echo "あいこです！\n";
     }
  
-    // ユーザーの負け
+    // ユーザーの勝ち
     if ($player_hand === 0 && $cp_hand === 1) {
-       echo "「あなたの負けです！\n";
+       echo "あなたの勝ちです！\n";
     }
     if ($player_hand === 1 && $cp_hand === 2) {
-	echo "「あなたの負けです！\n";
+	echo "あなたの勝ちです！\n";
     }
     if ($player_hand === 2 && $cp_hand === 0 ) {
-        echo "「あなたの負けです！\n";
+        echo "あなたの勝ちです！\n";
     }
     
-    // ユーザーの勝ち
+    // ユーザーの負け
     if ($player_hand === 0 && $cp_hand === 2) {
-       echo "あなたの勝ちです！\n";
+       echo "あなたの負けです！\n";
     } 
     if ($player_hand === 1 &&  $cp_hand === 0) {
-       echo "あなたの勝ちです！\n";
+       echo "あなたの負けです！\n";
     }
     if ($player_hand === 2 && $cp_hand === 1) {
-       echo "あなたの勝ちです！\n";
+       echo "あなたの負けです！\n";
     }
+
