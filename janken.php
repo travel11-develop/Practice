@@ -1,11 +1,14 @@
 <?php
 
-    $janken = [
-	0 => 'グー',
-	1 => 'チョキ',
-	2 => 'パー',
-    ];
 
+$janken = [
+    0 => 'グー',
+    1 => 'チョキ',
+    2 => 'パー',
+];
+
+$game_continue = true;
+while ($game_continue) {
     echo "じゃんけんをしましょう！\n";
     echo "0: グー, 1: チョキ, 2: パー\n";
     echo "あなたの手を数字で入力してください:\n";
@@ -13,16 +16,11 @@
     // ユーザーの入力値を取得
     $player_input = trim(fgets(STDIN));
 
-    // ユーザーの入力値が数値でない場合エラー
-    if (is_numeric($player_input) === false) {
+    // 入力値のエラーチェック
+    if (is_numeric($player_input) === false || isset($janken[$player_input]) === false) {
         echo "無効な入力です。0〜2の数字を入力してください:\n";
-        exit;
+        continue;
     }    
-    // ユーザーの入力値が0-2以外の場合エラー
-    if (isset($janken[$player_input]) === false) {
-	echo "無効な入力です。0〜2の数字を入力してください:\n";
-        exit;
-    }
 
     $player_hand = (int)$player_input;
     echo '貴方の手：' . $janken[$player_hand] ."\n";
@@ -57,4 +55,15 @@
     if ($player_hand === 2 && $cp_hand === 1) {
        echo "あなたの負けです！\n";
     }
+
+    echo "もう一度やりますか？ (y/n):\n";
+
+    // 入力値をチェック
+    $answer = trim(fgets(STDIN));
+    if ($answer === 'y' || $answer === 'Y') {
+       $game_continue = true;
+    } else {
+       $game_continue = false;
+    }
+}
 
