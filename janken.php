@@ -14,29 +14,24 @@ $hands = [
 // ゲームの継続を管理する
 $is_game_continue = true;
 
-echo "じゃんけんをしましょう！\n";
-while ($is_game_continue) {
+/**
+ * 入力値のエラーチェック
+ * @param string $input
+ * @param array $hands
+ * @return bool
+ */
+function checkInputValue(string $input, array $hands)
+{
+    return array_key_exists($input, $hands);
+}
 
-    echo "0: グー, 1: チョキ, 2: パー\n";
-    echo "あなたの手を数字で入力してください:\n";
-
-    // ユーザーの入力値を取得
-    $player_input = trim(fgets(STDIN));
-
-    // 入力値のエラーチェック
-    if (array_key_exists($player_input, $hands) === false) {
-        echo "無効な入力です。0〜2の数字を入力してください:\n";
-        continue;
-    }
-
-    $player_hand = (int)$player_input;
-    echo '貴方の手：' . $hands[$player_hand] ."\n";
-
-    // コンピュータの手をランダムで選択
-    $computer_hand = mt_rand(0, 2);
-    echo 'コンピューターの手:' . $hands[$computer_hand] . "\n";
-
-    // 勝敗判定
+/**
+ * 勝敗判定
+ * @param string $player_hand
+ * @param string $computer_hand
+ */
+function judgeWinOrLose(string $player_hand, string $computer_hand)
+{
     if ($player_hand === $computer_hand) {
         echo "あいこです！\n";
     } elseif ($player_hand === GU && $computer_hand === CHOKI) {
@@ -48,6 +43,32 @@ while ($is_game_continue) {
     } else {
         echo "あなたの負けです！\n";
     }
+}
+
+echo "じゃんけんをしましょう！\n";
+while ($is_game_continue) {
+
+    echo "0: グー, 1: チョキ, 2: パー\n";
+    echo "あなたの手を数字で入力してください:\n";
+
+    // ユーザーの入力値を取得
+    $player_input = trim(fgets(STDIN));
+
+    // 入力値のエラーチェック
+    if (checkInputValue($player_input, $hands) === false) {
+        echo "無効な入力です。0〜2の数字を入力してください:\n";
+        continue;
+    }
+
+    $player_hand = (string)$player_input;
+    echo '貴方の手：' . $hands[$player_hand] ."\n";
+
+    // コンピュータの手をランダムで選択
+    $computer_hand = (string)random_int(0, 2);
+    echo 'コンピューターの手:' . $hands[$computer_hand] . "\n";
+
+    // 勝敗判定
+    judgeWinOrLose($player_hand, $computer_hand);
 
     echo "もう一度やりますか？ (y/n):\n";
 
