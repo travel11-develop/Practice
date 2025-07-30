@@ -14,32 +14,35 @@ $hands = [
 
 /**
  * 入力値のエラーチェック
+ *
  * @param string $input
  * @param array $hands
- * @return bool
+ * @return bool Return check input value result
  */
-function checkInputValue(string $input, array $hands)
+function checkInputValue(string $input, array $hands): bool
 {
     return array_key_exists($input, $hands);
 }
 
 /**
  * 勝敗判定
+ *
  * @param string $player_hand
  * @param string $computer_hand
+ * @return string Return judgement draw or win or lose
  */
-function judgeWinOrLose(string $player_hand, string $computer_hand)
+function judgeWinOrLose(string $player_hand, string $computer_hand): string
 {
     if ($player_hand === $computer_hand) {
-        echo "あいこです！\n";
-    } elseif ($player_hand === GU && $computer_hand === CHOKI) {
-        echo "あなたの勝ちです！\n";
-    } elseif ($player_hand === CHOKI && $computer_hand === PA) {
-        echo "あなたの勝ちです！\n";
-    } elseif ($player_hand === PA && $computer_hand === GU) {
-        echo "あなたの勝ちです！\n";
+        return 'draw';
+    } elseif (
+        ($player_hand === GU && $computer_hand === CHOKI) ||
+        ($player_hand === CHOKI && $computer_hand === PA) ||
+        ($player_hand === PA && $computer_hand === GU)
+    ) {
+        return 'win';
     } else {
-        echo "あなたの負けです！\n";
+        return 'lose';
     }
 }
 
@@ -47,7 +50,6 @@ echo "じゃんけんをしましょう！\n";
 
 // breakするまでじゃんけん処理をループ
 while (true) {
-
     echo "0: グー, 1: チョキ, 2: パー\n";
     echo "あなたの手を数字で入力してください:\n";
 
@@ -68,7 +70,14 @@ while (true) {
     echo 'コンピューターの手:' . $hands[$computer_hand] . "\n";
 
     // 勝敗判定
-    judgeWinOrLose($player_hand, $computer_hand);
+    $result = judgeWinOrLose($player_hand, $computer_hand);
+    if ($result === 'draw') {
+        echo "あいこです！\n";
+    } elseif ($result === 'win') {
+        echo "あなたの勝ちです！\n";
+    } else {
+        echo "あなたの負けです！\n";
+    }
 
     echo "もう一度やりますか？ (y/n):\n";
 
