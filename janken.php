@@ -11,8 +11,6 @@ $hands = [
     CHOKI => 'チョキ',
     PA => 'パー',
 ];
-// ゲームの継続を管理する
-$is_game_continue = true;
 
 /**
  * 入力値のエラーチェック
@@ -46,7 +44,9 @@ function judgeWinOrLose(string $player_hand, string $computer_hand)
 }
 
 echo "じゃんけんをしましょう！\n";
-while ($is_game_continue) {
+
+// breakするまでじゃんけん処理をループ
+while (true) {
 
     echo "0: グー, 1: チョキ, 2: パー\n";
     echo "あなたの手を数字で入力してください:\n";
@@ -74,9 +74,7 @@ while ($is_game_continue) {
 
     // 入力値をチェック
     $answer = trim(fgets(STDIN));
-    if ($answer === 'y' || $answer === 'Y') {
-       $is_game_continue = true;
-    } else {
-       $is_game_continue = false;
+    if (strtolower($answer) !== 'y') {
+       break;
     }
 }
