@@ -19,7 +19,7 @@ $hands = [
  * @param array $hands
  * @return bool Return check input value result
  */
-function checkInputValue(string $input, array $hands): bool
+function isValidInputValue(string $input, array $hands): bool
 {
     return array_key_exists($input, $hands);
 }
@@ -57,7 +57,7 @@ while (true) {
     $player_input = trim(fgets(STDIN));
 
     // 入力値のエラーチェック
-    if (checkInputValue($player_input, $hands) === false) {
+    if (isValidInputValue($player_input, $hands) === false) {
         echo "無効な入力です。0〜2の数字を入力してください:\n";
         continue;
     }
