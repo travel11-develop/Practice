@@ -1,6 +1,26 @@
 <?php
 declare(strict_types=1);
 
+enum Result{
+    case Draw;
+    case Win;
+    case Lose;
+
+    /**
+    * 勝敗結果のテキストを返す
+    *
+    * @return string
+    */
+    public function text():string
+    {
+        return match($this) {
+            self::Draw => 'あいこです！',
+            self::Win => 'あなたの勝ちです！',
+            self::Lose => 'あなたの負けです！',
+        };
+    }
+}
+
 const GU = '0';
 const CHOKI = '1';
 const PA = '2';
@@ -34,15 +54,15 @@ function isValidInputValue(string $input, array $hands): bool
 function judgeWinOrLose(string $player_hand, string $computer_hand): string
 {
     if ($player_hand === $computer_hand) {
-        return 'draw';
+        return Result::Draw->name;
     } elseif (
         ($player_hand === GU && $computer_hand === CHOKI) ||
         ($player_hand === CHOKI && $computer_hand === PA) ||
         ($player_hand === PA && $computer_hand === GU)
     ) {
-        return 'win';
+        return Result::Win->name;
     } else {
-        return 'lose';
+        return Result::Lose->name;
     }
 }
 
@@ -71,12 +91,12 @@ while (true) {
 
     // 勝敗判定
     $result = judgeWinOrLose($player_hand, $computer_hand);
-    if ($result === 'draw') {
-        echo "あいこです！\n";
-    } elseif ($result === 'win') {
-        echo "あなたの勝ちです！\n";
+    if ($result === Result::Draw->name) {
+        echo Result::Draw->text() . "\n";
+    } elseif ($result === Result::Win->name) {
+        echo Result::Win->text() . "\n";
     } else {
-        echo "あなたの負けです！\n";
+        echo Result::Lose->text() . "\n";
     }
 
     echo "もう一度やりますか？ (y/n):\n";
