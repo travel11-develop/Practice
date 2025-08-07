@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * じゃんけんの勝敗結果を表す列挙型
+ *
+ * Draw: 引き分け
+ * Win: 勝ち
+ * Lose: 負け
+ */
 enum Result
 {
     case Draw;
@@ -22,6 +29,13 @@ enum Result
     }
 }
 
+/**
+ * じゃんけんの手を表す列挙型
+ *
+ * GU: グー
+ * CHOKI: チョキ
+ * PA: パー
+ */
 enum Hands: string
 {
     case GU = '0';
@@ -41,38 +55,37 @@ enum Hands: string
             self::PA => 'パー',
         };
     }
-}
 
-/**
- * 入力値のエラーチェック
- *
- * @param string $input
- * @return bool Return check input value result
- */
-function isValidInputValue(string $input): bool
-{
-    return Hands::tryFrom($input) !== null;
+    /**
+     * じゃんけんで勝つ手を返す
+     *
+     * @return Hands
+     */
+    public function winHans(): Hands
+    {
+        return match($this) {
+            self::GU => self::CHOKI,
+            self::CHOKI => self::PA,
+            self::PA => self::GU,
+        };
+    }
 }
 
 /**
  * 勝敗判定
  *
- * @param string $player_hand
- * @param string $computer_hand
- * @return object Return judgement draw or win or lose
+ * @param Hands $player_hand
+ * @param Hands $computer_hand
+ * @return string Return judgement draw or win or lose
  */
-function judgeWinOrLose(string $player_hand, string $computer_hand): object
+function judgeWinOrLose(Hands $player_hand, Hands $computer_hand): string
 {
     if ($player_hand === $computer_hand) {
-        return Result::Draw;
-    } elseif (
-        ($player_hand === Hands::GU->value && $computer_hand === Hands::CHOKI->value) ||
-        ($player_hand === Hands::CHOKI->value && $computer_hand === Hands::PA->value) ||
-        ($player_hand === Hands::PA->value && $computer_hand === Hands::GU->value)
-    ) {
-        return Result::Win;
+        return Result::Draw->getResultText();
+    } elseif ($player_hand->winHans() === $computer_hand) {
+        return Result::Win->getResultText();
     } else {
-        return Result::Lose;
+        return Result::Lose->getResultText();
     }
 }
 
@@ -84,23 +97,22 @@ while (true) {
     echo "あなたの手を数字で入力してください:\n";
 
     // ユーザーの入力値を取得
-    $player_hand = trim(fgets(STDIN));
+    $player_hand = Hands::tryFrom(trim(fgets(STDIN)));
 
     // 入力値のエラーチェック
-    if (isValidInputValue($player_hand) === false) {
+    if ($player_hand === null) {
         echo "無効な入力です。0〜2の数字を入力してください:\n";
         continue;
     }
 
-    echo '貴方の手：' . Hands::tryFrom($player_hand)->getHandText() ."\n";
+    echo '貴方の手：' . $player_hand->getHandText() ."\n";
 
     // コンピュータの手をランダムで選択
-    $computer_hand = (string)random_int(0, 2);
-    echo 'コンピューターの手:' . Hands::tryFrom($computer_hand)->getHandText() . "\n";
+    $computer_hand = Hands::tryFrom((string)random_int(0, 2));
+    echo 'コンピューターの手:' . $computer_hand->getHandText() . "\n";
 
     // 勝敗判定
-    $result = judgeWinOrLose($player_hand, $computer_hand);
-    echo $result->getResultText() . "\n";
+    echo judgeWinOrLose($player_hand, $computer_hand) . "\n";
 
     echo "もう一度やりますか？ (y/n):\n";
 
