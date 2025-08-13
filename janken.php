@@ -69,25 +69,24 @@ enum Hands: string
             self::PA => self::GU,
         };
     }
-}
 
-/**
- * 勝敗判定
- *
- * @param Hands $player_hand
- * @param Hands $computer_hand
- * @return string Return judgement draw or win or lose
- */
-function judgeWinOrLose(Hands $player_hand, Hands $computer_hand): string
-{
-    if ($player_hand === $computer_hand) {
-        return Result::Draw->getResultText();
-    } elseif ($player_hand->winHans() === $computer_hand) {
-        return Result::Win->getResultText();
-    } else {
-        return Result::Lose->getResultText();
+    /**
+     * 勝敗判定
+     *
+     * @param Hands コンピュータの手
+     * @return Result じゃんけんの勝敗
+     */
+    public function judge(Hands $hands): Result
+    {
+        // trueになった条件を返す
+        return match(true) {
+            $this === $hands => Result::Draw,
+            $this->winHans() === $hands => Result::Win,
+            default => Result::Lose,
+        };
     }
 }
+
 
 echo "じゃんけんをしましょう！\n";
 
@@ -112,7 +111,7 @@ while (true) {
     echo 'コンピューターの手:' . $computer_hand->getHandText() . "\n";
 
     // 勝敗判定
-    echo judgeWinOrLose($player_hand, $computer_hand) . "\n";
+    echo $player_hand->judge($computer_hand)->getResultText() . "\n";
 
     echo "もう一度やりますか？ (y/n):\n";
 
