@@ -78,7 +78,7 @@ enum Hands: string
      */
     public function judge(Hands $hands): Result
     {
-        // trueになった条件を返す
+        // 上から条件式を評価して最初にtrueになる条件式の右辺の結果を返す
         return match(true) {
             $this === $hands => Result::Draw,
             $this->winHans() === $hands => Result::Win,
@@ -86,7 +86,6 @@ enum Hands: string
         };
     }
 }
-
 
 echo "じゃんけんをしましょう！\n";
 
