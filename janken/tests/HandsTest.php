@@ -10,9 +10,9 @@ use Enum\Result;
 class HandsTest extends TestCase
 {
     #[DataProvider('handsProvider')]
-    public function testGetResultText(Hands $result, string $expected)
+    public function testGetResultText(Hands $hand, string $expected)
     {
-        $this->assertSame($expected, $result->getHandText());
+        $this->assertSame($expected, $hand->getHandText());
     }
 
     public static function handsProvider(): array
@@ -25,9 +25,9 @@ class HandsTest extends TestCase
     }
 
     #[DataProvider('winHandsProvider')]
-    public function testWinHands(Hands $result, Hands $expected)
+    public function testWinHands(Hands $hand, Hands $expected)
     {
-        $this->assertSame($expected, $result->winHans());
+        $this->assertSame($expected, $hand->winHands());
     }
 
     public static function winHandsProvider(): array
@@ -39,18 +39,40 @@ class HandsTest extends TestCase
         ];
     }
 
-    #[DataProvider('judgeDrawProvider')]
-    public function testJudgeDraw(Hands $hands, Result $expected)
+    public function testJudgeDraw()
     {
-        $this->assertSame($expected, $hands->judge($hands));
+        foreach (Hands::cases() as $hand) {
+            $this->assertSame(Result::Draw, $hand->judge($hand));
+        }
     }
 
-    public static function judgeDrawProvider(): array
+    #[DataProvider('judgeWinProvider')]
+    public function testJudgeWin(Hands $player_hands, Hands $computer_hands, Result $expected)
+    {
+        $this->assertSame($expected, $player_hands->judge($computer_hands));
+    }
+
+    public static function judgeWinProvider(): array
     {
         return [
-            [Hands::GU, Result::Draw],
-            [Hands::CHOKI, Result::Draw],
-            [Hands::PA, Result::Draw],
+            [Hands::GU, Hands::CHOKI, Result::Win],
+            [Hands::CHOKI, Hands::PA, Result::Win],
+            [Hands::PA, Hands::GU, Result::Win],
+        ];
+    }
+
+    #[DataProvider('judgeLoseProvider')]
+    public function testJudgeLose(Hands $player_hands, Hands $computer_hands, Result $expected)
+    {
+        $this->assertSame($expected, $player_hands->judge($computer_hands));
+    }
+
+    public static function judgeLoseProvider(): array
+    {
+        return [
+            [Hands::GU, Hands::PA, Result::Lose],
+            [Hands::CHOKI, Hands::GU, Result::Lose],
+            [Hands::PA, Hands::CHOKI, Result::Lose],
         ];
     }
 }

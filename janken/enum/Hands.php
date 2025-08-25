@@ -39,7 +39,7 @@ enum Hands: string
      *
      * @return Hands
      */
-    public function winHans(): Hands
+    public function winHands(): Hands
     {
         return match($this) {
             self::GU => self::CHOKI,
@@ -59,7 +59,7 @@ enum Hands: string
         // 上から条件式を評価し、最初に引数で指定したtrueと一致する条件式の右辺を返す
         return match(true) {
             $this === $hands => Result::Draw,
-            $this->winHans() === $hands => Result::Win,
+            $this->winHands() === $hands => Result::Win,
             default => Result::Lose,
         };
     }
