@@ -129,4 +129,17 @@ class HandsTest extends TestCase
             [Hands::PA, Hands::CHOKI, Result::Lose],
         ];
     }
+
+    /**
+     * judgeメソッドの異常系テスト
+     * Hands以外を引数にした場合
+     * 
+     * @covers Enum\Hands::winHands
+     * @return void
+     */
+    public function testJudgeTypeError(): void
+    {
+        $this->expectException(TypeError::class);
+        Hands::GU->judge('test');
+    }
 }
