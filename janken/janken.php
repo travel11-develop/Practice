@@ -14,30 +14,9 @@ class Janken {
      * @param string
      * @return string
      */
-    private function getHand($hand)
+    public function getHand($input)
     {
-        return Hands::tryFrom($hand);
-    } 
-
-    /**
-     * ユーザーのじゃんけんの手を取得
-     *
-     * @return string
-     */
-    public function getUserHand()
-    {
-        return $this->getHand(trim(fgets(STDIN)));
-    }
-
-    /**
-     * コンピュータの手をランダムで選択
-     *
-     * @return string
-     */
-    public function getPcHand()
-    {
-        $computer_hand = random_int(0, 2);
-        return $this->getHand((string)$computer_hand);
+        return Hands::tryFrom($input);
     }
 
     /**
@@ -57,19 +36,22 @@ class Janken {
 
     /**
      * 勝敗判定
+     *
+     * @param Hands
+     * @param Hands
+     * @return string
      */
     public function getResultText($player_hand, $computer_hand)
     {
-        return $player_hand->judge($computer_hand)->getResultText() . "\n";
+        return $player_hand->judge($computer_hand)->getResultText();
     }
 
     /**
      * ループ処理判定の入力値をチェック
      */
-    public function isCheckAnswer()
+    public function isCheckAnswer($input)
     {
-        $answer =  trim(fgets(STDIN));
-        if (strtolower($answer) !== 'y') {
+        if (strtolower($input) !== 'y') {
             return false;
         }
         return true;
@@ -86,7 +68,7 @@ while (true) {
     echo "あなたの手を数字で入力してください:\n";
 
     // ユーザーの入力値を取得
-    $player_hand =  $janken->getUserHand();
+    $player_hand =  $janken->getHand(trim(fgets(STDIN)));
 
     // 入力値のエラーチェック
     if ($janken->isCheckInput($player_hand) === false) continue;
@@ -94,7 +76,7 @@ while (true) {
     echo '貴方の手：' . $player_hand->getHandText() ."\n";
 
     // コンピュータの手をランダムで選択
-    $computer_hand = $janken->getPcHand();
+    $computer_hand = $janken->getHand((string)random_int(0, 2));
     echo 'コンピューターの手:' . $computer_hand->getHandText() . "\n";
 
     // 勝敗判定
@@ -103,5 +85,5 @@ while (true) {
     echo "もう一度やりますか？ (y/n):\n";
 
     // 入力値をチェック
-    if ($janken->isCheckAnswer() === false) break;
+    if ($janken->isCheckAnswer(trim(fgets(STDIN))) === false) break;
 }
