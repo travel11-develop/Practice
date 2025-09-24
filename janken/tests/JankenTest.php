@@ -1,12 +1,10 @@
 <?php
 require_once __DIR__ . '/../janken.php';
 require_once __DIR__ . '/../enum/Hands.php';
-require_once __DIR__ . '/../enum/Result.php';
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Enum\Hands;
-use Enum\Result;
 
 /**
  * Enum/Handsで作成したメソッドのテスト
