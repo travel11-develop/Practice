@@ -13,8 +13,12 @@ try {
     $vm->sumInsertMoney(100);
     $vm->sumInsertMoney(100);
 
-    // お釣り計算（コーラ 150円 を購入）
-    $change = $vm->calculateChange('コーラ');
+    // 購入結果
+    $drink = $vm->buy('コーラ');
+    echo "{$drink->getName()}を購入しました。";
+
+    // お釣りを算出
+    $change = $vm->refund();
     echo "お釣りは {$change} 円です。"; // 出力: お釣りは 50 円です。
 
 } catch (Exception $e) {
